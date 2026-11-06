@@ -1,0 +1,298 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    static Scanner sc = new Scanner(System.in);
+    static String file = "student.txt";
+
+    // Add Record
+    static void addRecord() throws IOException {
+
+        System.out.print("Enter Roll No: ");
+        String roll = sc.nextLine();
+
+        ArrayList<String> records = readRecords();
+
+        for (String r : records) {
+            if (r.split("\\|")[0].equals(roll)) {
+                System.out.println("Roll Number already exists!");
+                return;
+            }
+        }
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Age: ");
+        String age = sc.nextLine();
+
+        System.out.print("Enter M1: ");
+        String m1 = sc.nextLine();
+
+        System.out.print("Enter M2: ");
+        String m2 = sc.nextLine();
+
+        System.out.print("Enter M3: ");
+        String m3 = sc.nextLine();
+
+        System.out.print("Enter M4: ");
+        String m4 = sc.nextLine();
+
+        System.out.print("Enter Grade: ");
+        String grade = sc.nextLine();
+
+        FileWriter fw = new FileWriter(file, true);
+        PrintWriter pw = new PrintWriter(fw);
+
+        pw.println(roll + "|" + name + "|" + age + "|"
+                + m1 + "|" + m2 + "|" + m3 + "|" + m4 + "|" + grade);
+
+        pw.close();
+
+        System.out.println("Record Added Successfully!");
+    }
+
+    // Read all records from file
+    static ArrayList<String> readRecords() throws IOException {
+
+        ArrayList<String> list = new ArrayList<>();
+
+        File f = new File(file);
+
+        if (!f.exists())
+            return list;
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            list.add(line);
+        }
+
+        br.close();
+
+        return list;
+    }
+
+    // Display one record
+    static void display(String line) {
+
+        String[] s = line.split("\\|", -1);
+
+        System.out.println("Roll No : " + s[0]);
+        System.out.println("Name    : " + s[1]);
+        System.out.println("Age     : " + s[2]);
+        System.out.println("M1      : " + s[3]);
+        System.out.println("M2      : " + s[4]);
+        System.out.println("M3      : " + s[5]);
+        System.out.println("M4      : " + s[6]);
+        System.out.println("Grade   : " + s[7]);
+        System.out.println("----------------------");
+    }
+
+    // Read all records
+    static void readAll() throws IOException {
+
+        ArrayList<String> list = readRecords();
+
+        if (list.isEmpty()) {
+            System.out.println("No Records Found!");
+            return;
+        }
+
+        for (String r : list) {
+            display(r);
+        }
+    }
+
+    // Read record by Roll Number
+    static void readByRoll() throws IOException {
+
+        System.out.print("Enter Roll No: ");
+        String roll = sc.nextLine();
+
+        for (String r : readRecords()) {
+
+            String[] s = r.split("\\|", -1);
+
+            if (s[0].equals(roll)) {
+                display(r);
+                return;
+            }
+        }
+
+        System.out.println("Record Not Found!");
+    }
+
+    // Read record by Name
+    static void readByName() throws IOException {
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        for (String r : readRecords()) {
+
+            String[] s = r.split("\\|", -1);
+
+            if (s[1].equalsIgnoreCase(name)) {
+                display(r);
+            }
+        }
+    }
+
+    // Delete record by Roll Number
+    static void deleteRecord() throws IOException {
+
+        System.out.print("Enter Roll No: ");
+        String roll = sc.nextLine();
+
+        ArrayList<String> list = readRecords();
+
+        boolean found = false;
+
+        Iterator<String> it = list.iterator();
+
+        while (it.hasNext()) {
+
+            String[] s = it.next().split("\\|", -1);
+
+            if (s[0].equals(roll)) {
+                it.remove();
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            writeRecords(list);
+            System.out.println("Record Deleted Successfully!");
+        } else {
+            System.out.println("Record Not Found!");
+        }
+    }
+
+    // Update record by Roll Number
+    static void updateRecord() throws IOException {
+
+        System.out.print("Enter Roll No: ");
+        String roll = sc.nextLine();
+
+        ArrayList<String> list = readRecords();
+
+        boolean found = false;
+
+        for (int i = 0; i < list.size(); i++) {
+
+            String[] s = list.get(i).split("\\|", -1);
+
+            if (s[0].equals(roll)) {
+
+                System.out.print("Enter New Name: ");
+                s[1] = sc.nextLine();
+
+                System.out.print("Enter New Age: ");
+                s[2] = sc.nextLine();
+
+                System.out.print("Enter New M1: ");
+                s[3] = sc.nextLine();
+
+                System.out.print("Enter New M2: ");
+                s[4] = sc.nextLine();
+
+                System.out.print("Enter New M3: ");
+                s[5] = sc.nextLine();
+
+                System.out.print("Enter New M4: ");
+                s[6] = sc.nextLine();
+
+                System.out.print("Enter New Grade: ");
+                s[7] = sc.nextLine();
+
+                list.set(i, String.join("|", s));
+
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            writeRecords(list);
+            System.out.println("Record Updated Successfully!");
+        } else {
+            System.out.println("Record Not Found!");
+        }
+    }
+
+    // Write records back to file
+    static void writeRecords(ArrayList<String> list)
+            throws IOException {
+
+        PrintWriter pw = new PrintWriter(new FileWriter(file));
+
+        for (String r : list) {
+            pw.println(r);
+        }
+
+        pw.close();
+    }
+
+    // Main Menu
+    public static void main(String[] args) throws IOException {
+
+        int choice;
+
+        do {
+
+            System.out.println("\n===== STUDENT RECORD MANAGEMENT =====");
+            System.out.println("1. Add Record");
+            System.out.println("2. Read All Records");
+            System.out.println("3. Read Record by Roll Number");
+            System.out.println("4. Read Record by Name");
+            System.out.println("5. Delete Record by Roll Number");
+            System.out.println("6. Update Record by Roll Number");
+            System.out.println("7. Exit");
+
+            System.out.print("Enter Your Choice: ");
+            choice = Integer.parseInt(sc.nextLine());
+
+            switch (choice) {
+
+                case 1:
+                    addRecord();
+                    break;
+
+                case 2:
+                    readAll();
+                    break;
+
+                case 3:
+                    readByRoll();
+                    break;
+
+                case 4:
+                    readByName();
+                    break;
+
+                case 5:
+                    deleteRecord();
+                    break;
+
+                case 6:
+                    updateRecord();
+                    break;
+
+                case 7:
+                    System.out.println("Thank You!");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+
+        } while (choice != 7);
+
+        sc.close();
+    }
+}
