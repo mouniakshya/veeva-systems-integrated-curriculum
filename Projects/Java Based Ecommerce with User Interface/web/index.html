@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BharatMart India - Official Online Store (Core Java & OOP)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar (Festival & Bank Deals) -->
+  <aside class="announcement-bar" aria-label="Platform Announcement">
+    <div class="announcement-content">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="announcement-tag">DIWALI DHAMAKA SALE</span>
+        <span>🎉 Flat 10% Instant Discount on RuPay &amp; UPI | Same-Day Dispatch across <strong>Delhi NCR</strong></span>
+      </div>
+      <span class="membership-pill" id="topMembershipPill">
+        <span>📍 Deliver to: <strong>Delhi 110001</strong></span>
+        <span style="opacity: 0.7;">|</span>
+        <span id="memberStatusText">Standard Delivery • ₹99</span>
+      </span>
+    </div>
+  </aside>
+
+  <!-- Main Navigation Bar -->
+  <header class="navbar" role="banner">
+    <div class="nav-container">
+      <!-- Brand Logo -->
+      <div class="brand-group">
+        <div class="brand-logo">🇮🇳</div>
+        <div class="brand-info">
+          <h1>BharatMart</h1>
+          <span class="brand-tag">India's Trusted Store • Java 22 OOP</span>
+        </div>
+      </div>
+
+      <!-- Human Delivery Location Pill -->
+      <div class="location-pill" onclick="openPinModal()" title="Click to change Delivery Pincode">
+        <span class="loc-icon">📍</span>
+        <div class="loc-text">
+          <span class="loc-sub">Delivering to</span>
+          <span class="loc-main" id="navLocMain">Connaught Place, New Delhi 110001</span>
+        </div>
+        <span style="font-size: 10px; color: #f97316; font-weight: 800; margin-left: 4px;">CHANGE</span>
+      </div>
+
+      <!-- Active Customer / User Session Selector -->
+      <div class="session-selector">
+        <label for="userRoleSelect">Customer:</label>
+        <select id="userRoleSelect" onchange="switchSession(this.value)">
+          <option value="aarav">Aarav Sharma (Connaught Place, New Delhi)</option>
+          <option value="priya">Priya Patel (Indiranagar, Bengaluru)</option>
+          <option value="rohan">Rohan Mehta (Bandra West, Mumbai)</option>
+          <option value="ananya">Ananya Iyer (Banjara Hills, Hyderabad)</option>
+          <option value="admin">Administrator Console (Delhi Central Hub)</option>
+        </select>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button class="nav-tab active" data-tab="catalogTab" onclick="switchTab('catalogTab')">
+          🛍️ Catalog
+        </button>
+        <button class="nav-tab" data-tab="ordersTab" onclick="switchTab('ordersTab')">
+          📦 My Orders <span class="badge" id="orderCountBadge">0</span>
+        </button>
+        <button class="nav-tab" data-tab="membershipTab" onclick="switchTab('membershipTab')">
+          ⭐ Prime Club
+        </button>
+        <button class="nav-tab" data-tab="adminTab" id="adminNavTab" onclick="switchTab('adminTab')">
+          🛠️ Operations
+        </button>
+      </nav>
+
+      <!-- Cart Button -->
+      <button class="cart-btn" onclick="toggleCartDrawer()">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-label">Cart</span>
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Human-Made Trust Markers Strip -->
+  <aside class="trust-strip" aria-label="Customer Trust & Guarantees">
+    <div class="trust-content">
+      <div class="trust-item"><span class="icon">🛡️</span> <span><strong>100% Genuine</strong> Indian Warranty</span></div>
+      <div class="trust-item"><span class="icon">⚡</span> <span><strong>Next-Day Delivery</strong> in Delhi NCR</span></div>
+      <div class="trust-item"><span class="icon">🔄</span> <span><strong>7-Day Easy Return</strong> &amp; Restock</span></div>
+      <div class="trust-item"><span class="icon">💳</span> <span><strong>UPI, RuPay &amp; COD</strong> Available</span></div>
+      <div class="trust-item"><span class="icon">🏢</span> <span><strong>GST Tax Invoice</strong> with Input Credit</span></div>
+    </div>
+  </aside>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-badges">
+        <span class="pill-tag primary">Core Java 22 OOP</span>
+        <span class="pill-tag success">Indian Rupee (₹) Pricing</span>
+        <span class="pill-tag info">Delhivery Live Logistics</span>
+        <span class="pill-tag warning">Diwali Festive Offers</span>
+      </div>
+      <h2>India's Next-Gen E-Commerce Architecture</h2>
+      <p>Simulating true OOP concepts: Encapsulation, Abstraction, Polymorphic UPI/Card/COD Payments, Customer Database Pools, Multi-Query Product Retrieval, and Delhi Hub Logistics.</p>
+    </div>
+  </section>
+
+  <!-- Main Content Area -->
+  <main class="main-layout">
+
+    <!-- TAB 1: PRODUCT CATALOG & SEARCH (Requirement 3) -->
+    <section id="catalogTab" class="tab-content active">
+      <!-- Search & Query Filter Control Panel -->
+      <div class="filter-panel">
+        <div class="filter-header">
+          <div class="filter-title">
+            <span>🔍</span>
+            <div>
+              <h3>Explore Products &amp; Multi-Query Engine</h3>
+              <p>Execute any of the 6 exact query modes specified in Requirement 3</p>
+            </div>
+          </div>
+          <div class="query-mode-selector">
+            <label for="queryModeSelect">Query Mode:</label>
+            <select id="queryModeSelect" onchange="onQueryModeChange()">
+              <option value="all">List All Products</option>
+              <option value="mode_i">Query (i): By Product ID</option>
+              <option value="mode_ii">Query (ii): By Product Name</option>
+              <option value="mode_iii">Query (iii): By Name &amp; Exact Price (₹)</option>
+              <option value="mode_iv">Query (iv): By Name &amp; Price Range (₹)</option>
+              <option value="mode_v">Query (v): By Name &amp; Company / Brand</option>
+              <option value="mode_vi">Query (vi): By Name, Company &amp; Price</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dynamic Query Input Fields -->
+        <div class="query-inputs-grid" id="queryInputsGrid">
+          <div class="input-field" id="inputNameGroup">
+            <label for="queryName">Search Product Name</label>
+            <input type="text" id="queryName" placeholder="e.g. iPhone, Galaxy, Sony, OnePlus" oninput="applyCatalogSearch()">
+          </div>
+          <div class="input-field hidden" id="inputIdGroup">
+            <label for="queryId">Product ID</label>
+            <input type="text" id="queryId" placeholder="e.g. P101, P105" oninput="applyCatalogSearch()">
+          </div>
+          <div class="input-field hidden" id="inputCompanyGroup">
+            <label for="queryCompany">Brand / Manufacturer</label>
+            <input type="text" id="queryCompany" placeholder="e.g. Apple, Samsung, Sony, OnePlus" oninput="applyCatalogSearch()">
+          </div>
+          <div class="input-field hidden" id="inputPriceGroup">
+            <label for="queryPrice">Exact Price (₹)</label>
+            <input type="number" id="queryPrice" placeholder="e.g. 56999" step="1" oninput="applyCatalogSearch()">
+          </div>
+          <div class="input-field hidden" id="inputMinPriceGroup">
+            <label for="queryMinPrice">Min Price (₹)</label>
+            <input type="number" id="queryMinPrice" placeholder="e.g. 20000" step="100" oninput="applyCatalogSearch()">
+          </div>
+          <div class="input-field hidden" id="inputMaxPriceGroup">
+            <label for="queryMaxPrice">Max Price (₹)</label>
+            <input type="number" id="queryMaxPrice" placeholder="e.g. 130000" step="100" oninput="applyCatalogSearch()">
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+            <button class="btn btn-primary" onclick="applyCatalogSearch()">Search Catalog</button>
+          </div>
+        </div>
+
+        <!-- Company / Brand Filter Chips -->
+        <div class="filter-chips-row">
+          <span class="chips-label">Popular Brands:</span>
+          <button class="chip active" onclick="filterByCompanyChip('All', this)">All Brands</button>
+          <button class="chip" onclick="filterByCompanyChip('Apple', this)">Apple</button>
+          <button class="chip" onclick="filterByCompanyChip('Samsung', this)">Samsung</button>
+          <button class="chip" onclick="filterByCompanyChip('Sony', this)">Sony</button>
+          <button class="chip" onclick="filterByCompanyChip('OnePlus', this)">OnePlus</button>
+          <button class="chip" onclick="filterByCompanyChip('boAt', this)">boAt</button>
+          <button class="chip" onclick="filterByCompanyChip('Amazon', this)">Amazon</button>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="catalog-summary">
+        <span id="resultsCount">Showing Products</span>
+        <span class="stock-indicator">● Delhi Fulfillment Hub Live Stock Synchronized</span>
+      </div>
+      <div class="products-grid" id="productsGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 2: MY ORDERS & COURIER TRACKING (Requirement 5 & 6) -->
+    <section id="ordersTab" class="tab-content">
+      <div class="orders-header">
+        <div>
+          <h3>My Orders &amp; Live Delhivery / Blue Dart Tracking</h3>
+          <p>Track order progression across intervals, view itemized GST tax invoices, and courier checkpoints</p>
+        </div>
+      </div>
+
+      <div class="orders-container" id="ordersList">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 3: MEMBERSHIP SUBSCRIPTIONS (Requirement 11) -->
+    <section id="membershipTab" class="tab-content">
+      <div class="section-hero">
+        <span class="pill-tag primary">BharatPrime Exclusive</span>
+        <h3>BharatPrime VIP Customer Subscriptions</h3>
+        <p>Subscribe to enjoy <strong>100% FREE EXPRESS DELIVERY (₹0 Shipping Cost)</strong> on all orders across Delhi NCR &amp; India, plus early access to festival sales.</p>
+      </div>
+
+      <div class="subscription-status-card" id="currentSubCard">
+        <!-- Active subscription details or guest status -->
+      </div>
+
+      <div class="pricing-cards-grid">
+        <!-- Monthly -->
+        <div class="pricing-card">
+          <div class="pricing-badge">Monthly Trial</div>
+          <h4>Monthly Prime</h4>
+          <div class="pricing-price">₹199 <span>/ month</span></div>
+          <p class="pricing-duration">Valid for 30 Days</p>
+          <ul class="pricing-perks">
+            <li>✓ 100% Free Express Delivery (Save ₹99 on every order)</li>
+            <li>✓ Unlimited Orders</li>
+            <li>✓ Standard Priority Support</li>
+          </ul>
+          <button class="btn btn-outline" onclick="purchaseSubscription('MONTHLY', 199.00)">Subscribe for ₹199</button>
+        </div>
+
+        <!-- Quarterly -->
+        <div class="pricing-card">
+          <div class="pricing-badge">3 Months</div>
+          <h4>Quarterly Prime</h4>
+          <div class="pricing-price">₹499 <span>/ 3 months</span></div>
+          <p class="pricing-duration">Valid for 90 Days • Save ₹98</p>
+          <ul class="pricing-perks">
+            <li>✓ 100% Free Express Delivery on all orders</li>
+            <li>✓ Early Access to Festive Flash Deals</li>
+            <li>✓ Priority Dispatch from Delhi Hub</li>
+          </ul>
+          <button class="btn btn-outline" onclick="purchaseSubscription('QUARTERLY', 499.00)">Subscribe for ₹499</button>
+        </div>
+
+        <!-- Half-Yearly -->
+        <div class="pricing-card">
+          <div class="pricing-badge">6 Months</div>
+          <h4>Half-Yearly Prime</h4>
+          <div class="pricing-price">₹899 <span>/ 6 months</span></div>
+          <p class="pricing-duration">Valid for 180 Days • Save ₹295</p>
+          <ul class="pricing-perks">
+            <li>✓ 100% Free Express Delivery</li>
+            <li>✓ 25% Savings over monthly rate</li>
+            <li>✓ Priority Fulfillment Center Processing</li>
+          </ul>
+          <button class="btn btn-outline" onclick="purchaseSubscription('HALF_YEARLY', 899.00)">Subscribe for ₹899</button>
+        </div>
+
+        <!-- Annually (Featured) -->
+        <div class="pricing-card popular">
+          <div class="pricing-badge featured">Best Value • Save ₹889</div>
+          <h4>Annual VIP Prime</h4>
+          <div class="pricing-price">₹1,499 <span>/ year</span></div>
+          <p class="pricing-duration">Valid for 365 Days • Just ₹125/month</p>
+          <ul class="pricing-perks">
+            <li>✓ 100% Free Express Delivery across India</li>
+            <li>✓ Dedicated VIP Helpline &amp; Instant Returns</li>
+            <li>✓ Exclusive Festival Cashbacks &amp; Coupons</li>
+          </ul>
+          <button class="btn btn-primary" onclick="purchaseSubscription('ANNUALLY', 1499.00)">Subscribe Annual VIP (₹1,499)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: ADMIN OPERATIONS CONSOLE (Requirements 2, 3, 5) -->
+    <section id="adminTab" class="tab-content">
+      <div class="admin-dashboard-header">
+        <div>
+          <h3>System Administrator Operations Console</h3>
+          <p>Manage customer database pools, product catalog, Delhivery order intervals, and festive gift cards</p>
+        </div>
+        <span class="role-chip">DELHI HUB OPERATIONS</span>
+      </div>
+
+      <div class="admin-grid">
+        <!-- Admin Section 1: Order Progression Intervals (Requirement 5) -->
+        <div class="admin-card full-width">
+          <div class="admin-card-header">
+            <h4>🚚 Order Status Lifecycle Intervals</h4>
+            <span class="badge warning">Admin Action Required</span>
+          </div>
+          <p class="card-desc">Progress customer orders through the 5 intervals defined in Requirement 5. When an order is marked <em>Returned by Customer &amp; Received</em>, items are automatically restocked into catalog inventory.</p>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Total (₹)</th>
+                  <th>Current Status</th>
+                  <th>Courier / Hub</th>
+                  <th>Interval Progression</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Admin Section 2: Product Catalog Management -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h4>➕ Add New Product to Catalog</h4>
+          </div>
+          <form id="addProductForm" onsubmit="handleAdminAddProduct(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Product ID</label>
+                <input type="text" id="adminNewId" required placeholder="e.g. P112">
+              </div>
+              <div class="form-group">
+                <label>Brand / Manufacturer</label>
+                <input type="text" id="adminNewCompany" required placeholder="e.g. OnePlus, boAt">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Product Name</label>
+              <input type="text" id="adminNewName" required placeholder="e.g. OnePlus Nord CE4 (8GB/256GB)">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Price (₹)</label>
+                <input type="number" id="adminNewPrice" step="1" required placeholder="24999">
+              </div>
+              <div class="form-group">
+                <label>Stock Qty</label>
+                <input type="number" id="adminNewStock" min="1" required placeholder="50">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <input type="text" id="adminNewCategory" required placeholder="Mobiles">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary full-width">Add Product to Catalog</button>
+          </form>
+        </div>
+
+        <!-- Admin Section 3: Customer Pool Database (Requirement 2) -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h4>👥 Customer Database Pool (India)</h4>
+            <span class="badge" id="adminCustomerCountBadge">4 Customers</span>
+          </div>
+          <p class="card-desc">Query and inspect encapsulated customer profiles in the central database pool.</p>
+          <div class="customer-search-bar" style="margin-bottom: 12px;">
+            <input type="text" id="adminCustSearch" placeholder="Filter by customer name, city (e.g. Delhi), phone..." oninput="filterAdminCustomers()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); color: #fff;">
+          </div>
+          <div class="customer-list-scroll" id="adminCustomerList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Admin Section 4: Issue Festive Gift Card (Requirement 10) -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h4>🎁 Issue Diwali / Festive Gift Card</h4>
+          </div>
+          <p class="card-desc">Generate digital gift vouchers in INR for customers to redeem during checkout.</p>
+          <form id="issueGiftCardForm" onsubmit="handleAdminIssueGiftCard(event)">
+            <div class="form-group">
+              <label>Card Code</label>
+              <input type="text" id="adminGcCode" required placeholder="e.g. DIWALI2026">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>4-Digit Security PIN</label>
+                <input type="text" id="adminGcPin" required maxlength="4" placeholder="4321">
+              </div>
+              <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="adminGcAmt" required min="100" placeholder="2500">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-secondary full-width">Issue Gift Voucher</button>
+          </form>
+          <div class="active-gift-cards" id="activeGiftCardsList">
+            <!-- List of available gift cards -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- SHOPPING CART SLIDE-OVER DRAWER -->
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Cart">
+    <div class="cart-backdrop" onclick="toggleCartDrawer()"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <div class="cart-title-row">
+          <h3>Shopping Basket</h3>
+          <button class="close-btn" onclick="toggleCartDrawer()">&times;</button>
+        </div>
+        <div class="cart-delivery-target">
+          <span>📍 Delivering to:</span>
+          <strong id="cartUserLabel">Aarav Sharma - Delhi (110001)</strong>
+        </div>
+      </div>
+
+      <div class="cart-items-container" id="cartItemsList">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Pricing Summary Breakdown (Requirement 9, 11, 12 in INR) -->
+      <div class="cart-footer">
+        <div class="summary-line">
+          <span>Items Subtotal:</span>
+          <span id="summarySubtotal">₹0.00</span>
+        </div>
+        <div class="summary-line discount-line" id="discountLineRow" style="color: #34d399; font-weight: 700;">
+          <span>Loyalty / Festive Reward (Req 12):</span>
+          <span id="summaryDiscount">-₹0.00</span>
+        </div>
+        <div class="summary-line">
+          <span>Delivery Charges:</span>
+          <span id="summaryShipping">₹99.00</span>
+        </div>
+        <div class="shipping-note" id="shippingWaiverNote">
+          💡 Join BharatPrime to enjoy 100% Free Express Delivery!
+        </div>
+        <div class="summary-line total-line">
+          <span>Total Payable Amount:</span>
+          <span id="summaryTotal">₹0.00</span>
+        </div>
+
+        <button class="btn btn-primary btn-checkout" id="checkoutBtn" onclick="openCheckoutModal()">
+          Proceed to Buy 💳
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MODAL 1: CHECKOUT & POLYMORPHIC PAYMENT MODAL (Requirement 7 & 10) -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-backdrop" onclick="closeCheckoutModal()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Complete Your Order</h3>
+        <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Delivery Address Confirmation -->
+        <div class="checkout-section">
+          <h4>📍 Delivery Address (Delhi NCR / India)</h4>
+          <p class="address-box" id="checkoutAddressBox">Flat 402, Block B, Connaught Place, New Delhi, Delhi - 110001, India</p>
+        </div>
+
+        <!-- Polymorphic Payment Selector -->
+        <div class="checkout-section">
+          <h4>💳 Select Payment Method (Polymorphism)</h4>
+          <div class="payment-tabs">
+            <button class="payment-tab active" data-pm="upi" onclick="selectPaymentMethod('upi', this)">UPI (Instant)</button>
+            <button class="payment-tab" data-pm="card" onclick="selectPaymentMethod('card', this)">RuPay / Card</button>
+            <button class="payment-tab" data-pm="cod" onclick="selectPaymentMethod('cod', this)">Cash on Delivery</button>
+            <button class="payment-tab" data-pm="giftcard" onclick="selectPaymentMethod('giftcard', this)">Gift Voucher</button>
+          </div>
+
+          <!-- UPI Form -->
+          <div class="payment-form active" id="formUpi">
+            <div class="upi-qr-box">
+              <span class="upi-qr-icon">📱</span>
+              <div class="upi-qr-text">
+                <strong>Scan &amp; Pay or Enter Virtual Payment Address (VPA)</strong><br>
+                Instant zero-fee verification via NPCI UPI Gateway
+              </div>
+            </div>
+            <div class="form-group">
+              <label>UPI ID (e.g. mobile@oksbi, name@ybl, name@paytm)</label>
+              <input type="text" id="upiIdInput" value="aarav.sharma@oksbi" placeholder="yourname@bank">
+            </div>
+            <div class="form-group">
+              <label>UPI App</label>
+              <select id="upiAppInput">
+                <option value="GooglePay">Google Pay (GPay)</option>
+                <option value="PhonePe">PhonePe</option>
+                <option value="Paytm">Paytm</option>
+                <option value="BHIM">BHIM UPI</option>
+                <option value="Cred">CRED UPI</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Card Form -->
+          <div class="payment-form" id="formCard">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Card Network</label>
+                <select id="cardTypeInput">
+                  <option value="DEBIT_CARD">RuPay / Debit Card</option>
+                  <option value="CREDIT_CARD">Credit Card (Visa / Mastercard)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Cardholder Name</label>
+                <input type="text" id="cardHolderInput" value="Aarav Sharma">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Card Number (16 Digits)</label>
+              <input type="text" id="cardNumberInput" value="5123 4567 8901 2345" maxlength="19">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expiry Date (MM/YY)</label>
+                <input type="text" id="cardExpiryInput" value="08/29" maxlength="5">
+              </div>
+              <div class="form-group">
+                <label>CVV (3 Digits)</label>
+                <input type="password" id="cardCvvInput" value="123" maxlength="4">
+              </div>
+            </div>
+            <p class="hint">🔒 Protected by RBI 2-Factor Authentication &amp; 128-bit Bank Encryption</p>
+          </div>
+
+          <!-- COD Form -->
+          <div class="payment-form" id="formCod">
+            <div class="cod-box">
+              <div class="cod-icon">💵</div>
+              <div>
+                <strong>Cash on Delivery (Pay at Doorstep)</strong>
+                <p style="font-size: 11px; margin-top: 2px;">Pay with exact cash or scan the courier executive's QR code. A secure 4-digit verification code will be generated for delivery handover.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Delivery Instructions for Field Agent (Optional)</label>
+              <input type="text" id="codInstructionsInput" value="Call on mobile (+91 98112 34567) before arriving at Connaught Place gate">
+            </div>
+          </div>
+
+          <!-- Gift Card Form -->
+          <div class="payment-form" id="formGiftCard">
+            <div class="form-group">
+              <label>Gift Card / Voucher Code</label>
+              <input type="text" id="gcCodeInput" value="DIWALI500" placeholder="e.g. DIWALI500">
+              <div class="quick-gc-chips">
+                <span onclick="useQuickGc('DIWALI500', '1234')">Use DIWALI500 (₹500)</span>
+                <span onclick="useQuickGc('FESTIVE2000', '5678')">Use FESTIVE2000 (₹2,000)</span>
+                <span onclick="useQuickGc('MEGA5000', '9999')">Use MEGA5000 (₹5,000)</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>4-Digit Security PIN</label>
+              <input type="password" id="gcPinInput" value="1234" maxlength="4">
+            </div>
+            <div class="gc-balance-status" id="gcBalanceStatus" style="font-size: 12px;"></div>
+          </div>
+        </div>
+
+        <!-- Payable Breakdown -->
+        <div class="checkout-total-box">
+          <span>Net Amount Payable:</span>
+          <strong id="modalPayableAmount">₹0.00</strong>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeCheckoutModal()">Cancel</button>
+        <button class="btn btn-primary btn-pay" id="confirmPayBtn" onclick="executeCheckout()">
+          Place Order &amp; Pay 🔒
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: GST TAX INVOICE MODAL (India Format) -->
+  <div class="modal" id="invoiceModal">
+    <div class="modal-backdrop" onclick="closeInvoiceModal()"></div>
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>🧾 Tax Invoice / Cash Receipt</h3>
+        <button class="close-btn" onclick="closeInvoiceModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="invoiceModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeInvoiceModal()">Close</button>
+        <button class="btn btn-primary" onclick="printInvoice()">🖨️ Print Invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: LIVE COURIER TRACKING MODAL (Delhivery / Blue Dart) -->
+  <div class="modal" id="trackingModal">
+    <div class="modal-backdrop" onclick="closeTrackingModal()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🚚 Live Logistics &amp; Courier Tracking</h3>
+        <button class="close-btn" onclick="closeTrackingModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="trackingModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeTrackingModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: PINCODE DELIVERY CHECKER MODAL -->
+  <div class="modal" id="pinModal">
+    <div class="modal-backdrop" onclick="closePinModal()"></div>
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>📍 Check Delivery Pincode</h3>
+        <button class="close-btn" onclick="closePinModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-secondary);">Enter your 6-digit Indian Postal PIN code to verify delivery speed and courier hub coverage.</p>
+        <div class="form-group">
+          <label>Indian PIN Code (6 Digits)</label>
+          <input type="text" id="modalPinInput" maxlength="6" value="110001" placeholder="e.g. 110001, 560038, 400050" oninput="checkPincodeSpeed()">
+        </div>
+        <div id="pinResultBox" style="background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.4;">
+          <!-- Checked dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="applyCustomPincode()">Set as Delivery Location</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Alert -->
+  <div class="toast" id="toastNotification">
+    <span class="toast-icon" id="toastIcon">ℹ️</span>
+    <span class="toast-message" id="toastMessage">Notification message</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
