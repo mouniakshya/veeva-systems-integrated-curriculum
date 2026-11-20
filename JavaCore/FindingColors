@@ -1,0 +1,53 @@
+
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+
+        ArrayList<String> list = new ArrayList<>(List.of(
+            "Red", "Blue", "Green", "Yellow", "Red",
+            "Purple", "Blue", "Orange", "Red", "Green",
+            "Pink", "Yellow", "Blue", "Black", "White",
+            "Red", "Green", "Blue", "Orange", "Purple"
+        ));
+
+        HashMap<String, Integer> map = new HashMap<>();
+
+        // Find frequency of each color
+        for (String i : list) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+
+        int max = 0, min = Integer.MAX_VALUE;
+        String s = null, e = null;
+
+        for (String key : map.keySet()) {
+
+            if (map.get(key) > max) {
+                max = map.get(key);
+                s = key;
+            }
+
+            if (map.get(key) < min) {
+                min = map.get(key);
+                e = key;
+            }
+        }
+
+        System.out.println("Highest Frequency: " + s + " " + max);
+        System.out.println("Lowest Frequency: " + e + " " + min);
+
+        // Find colors occurring exactly k times
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter k: ");
+        int k = sc.nextInt();
+
+        System.out.println("Colors occurring " + k + " times:");
+
+        for (String key : map.keySet()) {
+            if (map.get(key) == k) {
+                System.out.println(key);
+            }
+        }
+    }
+}
