@@ -1,0 +1,43 @@
+1.	Design a payroll management system for an organization with different types of employees.
+Create an abstract class Employee with private fields id (int), name (String), and department (String). Include a constructor, getters, and an abstract method double calculateSalary().
+Create two subclasses:
+FullTimeEmployee: Adds baseSalary (double) and bonus (double). calculateSalary() returns baseSalary + bonus.
+ContractEmployee: Adds hourlyRate (double) and hoursWorked (int). calculateSalary() returns hourlyRate * hoursWorked.
+Create a PayrollManager class that maintains a List<Employee> and implements the following methods using Java Streams and Lambdas:
+Map<String, Double> getDepartmentWiseTotalSalary(): Returns a map of each department to its total salary payout.
+List<String> getTopEarners(double threshold): Returns a sorted list (alphabetical) of employee names whose calculated salary is strictly greater than the threshold.
+Constraints
+1 ≤ Number of employees ≤ 10⁴
+Salaries and rates are non-negative doubles.
+Sample Input & Output
+Input:
+FullTimeEmployee(101, "Alice", "IT", 60000, 10000) -> Salary: 70000.0
+ContractEmployee(102, "Bob", "IT", 500, 100) -> Salary: 50000.0
+FullTimeEmployee(103, "Charlie", "HR", 55000, 5000) -> Salary: 60000.0
+threshold = 55000
+Output:
+Department-wise Total Salary: {IT=120000.0, HR=60000.0}
+Top Earners (> 55000): ["Alice", "Charlie"]
+
+
+
+2.	Create a digital library catalog that prevents duplicate entries and analyzes book borrowing metrics.
+Define an interface Searchable with a method boolean matchesKeyword(String keyword).
+Create a Book class implementing Searchable with isbn (String), title (String), author (String), and borrowCount (int).
+Two books are considered identical if they have the same isbn.
+matchesKeyword(String keyword) returns true if title or author contains the keyword (case-insensitive).
+Create a LibraryCatalog class storing books in a Set<Book> with methods using Streams:
+List<Book> searchBooks(String keyword): Returns all books matching the keyword, sorted by borrowCount in descending order.
+Optional<Book> getMostBorrowedBook(): Returns the book with the highest borrowCount.
+Constraints
+0 ≤ borrowCount ≤ 10⁶
+ISBN strings are non-empty and unique per distinct edition.
+Sample Input & Output
+Input:
+Add Book("978-0134685991", "Effective Java", "Joshua Bloch", 150)
+Add Book("978-0134685991", "Effective Java 3rd Ed", "Joshua Bloch", 200) (Ignored as duplicate ISBN)
+Add Book("978-0596009205", "Head First Java", "Kathy Sierra", 320)
+Call searchBooks("java")
+Output:
+Search Results: [Head First Java (320), Effective Java (150)]
+Most Borrowed: Head First Java
