@@ -1,0 +1,20 @@
+1.	Dynamic Form Submission & Validation
+Problem Statement: Write a Selenium script to navigate to a registration page, fill in text fields (Name, Email, Password), select a country from a standard <select> dropdown by visible text, check a "Terms & Conditions" checkbox only if it is not already selected, and click Submit.
+Evaluation Criteria:
+Proper use of Select class (selectByVisibleText()).
+Conditional check using isSelected() before clicking the checkbox.
+Verification of a success message after submission.
+
+2.	Handling JavaScript Alerts & Pop-ups
+Problem Statement: Automate a scenario where clicking a button triggers a JavaScript Confirmation Alert. Print the alert text to the console, accept the alert, and then trigger a Prompt Alert, enter "Automation Test" into it, and dismiss it.
+Evaluation Criteria:
+Switching context using driver.switchTo().alert().
+Correct usage of getText(), accept(), sendKeys(), and dismiss().
+
+3.	Multi-Window / Tab Handling
+Problem Statement: Open a webpage containing a link that opens in a new browser tab. Click the link, switch to the newly opened tab, extract and print its page title, close the new tab, and switch control back to the parent window.
+Evaluation Criteria:
+Capturing parent window ID via getWindowHandle().
+Iterating through getWindowHandles() to identify and switch to the child window.
+Closing only the active tab (driver.close()) rather than the entire session (driver.quit()), followed by switching back to the parent handle.
+
